@@ -3,7 +3,7 @@
 ```bash
 # Clone repo
 git clone https://github.com/ZenAI-Vietnam/Preprocess.git
-cd yourproject
+cd Preprocess
 python -m venv venv
 source venv/bin/activate 
 pip install -r requirements.txt

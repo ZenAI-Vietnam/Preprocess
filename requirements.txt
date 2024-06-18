@@ -1,0 +1,12 @@
+export PYTHONPATH="/path/to/ShareGPT4V:$PYTHONPATH"
+
+Pillow
+torch
+torchvision
+transformers
+sentencepiece
+pyiqa
+protobuf
+accelerate
+timm
+numpy==1.26.4

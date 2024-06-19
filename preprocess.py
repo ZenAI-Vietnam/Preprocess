@@ -413,6 +413,11 @@ class Preprocessor:
                 pass
             elif args.caption_mode == 'captioner':
                 self.caption_Captioner(args, satisfy_folder)
+            elif args.caption_mode == "tagger":
+                if hasattr(args.caption_mode, "thresh_tag"):
+                    self.tagger(args, satisfy_folder)
+                else:
+                    raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
             else:
                 img_paths = sorted(glob.glob(os.path.join(satisfy_folder, '*')))
                 self.caption_gpt(args, img_paths)

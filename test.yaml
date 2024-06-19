@@ -13,6 +13,8 @@ caption:
   num_gpus: 1
   batch_size: 2
   caption_mode: captioner
+  tag_file: selected_tags.csv
+  thresh_tag: 0.3228
   model_path: "Lin-Chen/ShareGPT4V-7B"
   model_base: None
   query: "Describe this image. Be precise and short, focus on the content."

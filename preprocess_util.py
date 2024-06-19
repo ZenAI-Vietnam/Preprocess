@@ -50,6 +50,18 @@ def add_preprocess_arguments(parser: argparse.ArgumentParser):
         help="using .yaml instead of args to pass hyperparameter",
     )
     parser.add_argument(
+        "--num_gpus", 
+        default=1, 
+        type=int,
+        help="using .yaml instead of args to pass hyperparameter"
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=str,
+        default=1,
+        help="using .yaml instead of args to pass hyperparameter",
+    )
+    parser.add_argument(
         '-i', '--input',
         type=str, 
         default=None, 
@@ -62,12 +74,12 @@ def add_preprocess_arguments(parser: argparse.ArgumentParser):
     parser.add_argument(
         '--metric_mode',
         type=str,
-        default='FR',
+        default='NR',
         help='metric mode Full Reference or No Reference. options: FR|NR.')
     parser.add_argument(
         '-m', '--metric_name', 
         type=str, 
-        default='PSNR', 
+        default='brisque', 
         help='IQA metric name, case sensitive.')
     parser.add_argument(
         '--save_file', 

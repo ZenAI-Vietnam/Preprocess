@@ -9,4 +9,5 @@ pyiqa
 protobuf
 accelerate
 timm
+pandas
 numpy==1.26.4

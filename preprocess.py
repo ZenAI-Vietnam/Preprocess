@@ -1,14 +1,18 @@
 # test.py
 import os
 import yaml
+import timm
 import json
 import glob
 import torch
 import argparse
+import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from PIL import Image
 import preprocess_util
 from pyiqa import create_metric
+from torchvision import transforms
 from share4v.eval.run_share4v import eval_model
 from transformers import AutoModel, AutoTokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -288,6 +292,57 @@ class Preprocessor:
             raise AttributeError("Object 'args' does not have attribute 'save_caption_file'.")
 
 
+    def tagger(self, args, image_folder):
+
+        model = timm.create_model("hf_hub:trongg/swinv2_base", pretrained=True)
+        dim = 448
+        transform = transforms.Compose([
+            transforms.Resize((dim, dim)),
+            transforms.ToTensor()
+        ])
+        image_extensions = ('.jpg', '.jpeg', '.png', '.bmp', '.gif') 
+        imgs = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if f.lower().endswith(image_extensions)]
+        # save_score_file = "tag_caption_results.json"
+        chunk_size = len(imgs)//args.batch_size
+        if len(imgs) % args.batch_size != 0:
+            chunk_size += 1
+        model.eval()
+        label_names = pd.read_csv(args.tag_file)
+        results = {}
+        # thresh_tag = 0.3228
+
+        with torch.no_grad():
+            for i in range(chunk_size):
+                subs = []
+                for j in range(args.batch_size):
+                    if i*args.batch_size+j < len(imgs):
+                        img_path = imgs[i*args.batch_size+j]
+                        image = Image.open(img_path).convert("RGB")
+                        image = transform(image)
+                        subs.append(image.unsqueeze(0))
+                if len(subs) == 0:
+                    break
+                if torch.cuda.is_available():
+                    subs = torch.cat(subs, dim=0).cuda()
+                probs = model(subs).cpu().numpy()
+                for j in range(args.batch_size):
+                    label_names["probs"] = probs[j]
+                    image_name = os.path.basename(imgs[i*args.batch_size+j])
+                    found_tags = label_names[label_names["probs"] > args.thresh_tag][["tag_id", "name", "probs"]].sort_values(by="probs", ascending=False)
+                    results[image_name] = found_tags["name"].str.cat(sep=", ")
+
+        if args.save_caption_file:
+            save_dir = os.path.dirname(args.save_caption_file)
+            if save_dir and not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+
+            with open(args.save_caption_file, 'w') as sf:
+                json.dump(results, sf, indent=4)
+            print(f'Done! Score results are in {args.save_caption_file}.')
+        else:
+            print(f'Done!')
+
+
     def filter(self, args):
 
         image_folder = args.image_folder
@@ -344,6 +399,11 @@ class Preprocessor:
                 pass
             elif args.caption_mode == 'captioner':
                 self.caption_Captioner(args, satisfy_folder)
+            elif args.caption_mode == "tagger":
+                if hasattr(args.caption_mode, "thresh_tag"):
+                    self.tagger(args, satisfy_folder)
+                else:
+                    raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
             else:
                 img_paths = sorted(glob.glob(os.path.join(satisfy_folder, '*')))
                 self.caption_gpt(args, img_paths)
@@ -377,7 +437,3 @@ if __name__ == "__main__":
     preprocessor = Preprocessor(args)
     preprocessor.filter(args)
     
-
-
-
-

@@ -1,5 +1,5 @@
 directories:
-  image_folder: /home/sytrong-zenai/code/pinterest_headshot/final_data
+  image_folder: /home/sytrong-zenai/code/data_2
   satisfy_folder: /home/sytrong-zenai/code/satisfy
   notSatisfy_folder: /home/sytrong-zenai/code/notSatisfy
 
@@ -7,14 +7,14 @@ iqa:
   threshold: 50
   metric_name: brisque
   metric_mode: NR
-  save_score_file: score_results.json
+  save_score_file: score_results_2.json
 
 caption:
   num_gpus: 1
-  batch_size: 2
-  caption_mode: captioner
-  tag_file: selected_tags.csv
+  batch_size: 8
+  caption_mode: tagger
   thresh_tag: 0.3228
+  tag_file: /home/sytrong-zenai/code/selected_tags.csv
   model_path: "Lin-Chen/ShareGPT4V-7B"
   model_base: None
   query: "Describe this image. Be precise and short, focus on the content."
@@ -24,7 +24,7 @@ caption:
   top_p: None
   num_beams: 1
   max_new_tokens: 512
-  save_caption_file: caption_results.json
+  save_caption_file: tag_caption_results_2.json
 
 questions:
   - role: user

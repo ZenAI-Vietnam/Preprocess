@@ -294,7 +294,9 @@ class Preprocessor:
 
     def tagger(self, args, image_folder):
 
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model = timm.create_model("hf_hub:trongg/swinv2_base", pretrained=True)
+        model = model.to(device)
         dim = 448
         transform = transforms.Compose([
             transforms.Resize((dim, dim)),
@@ -375,8 +377,8 @@ class Preprocessor:
                         # system_prompt='' # pass system_prompt if needed
                     )
                     if res in question['answer']:
-                        idx += 1
                         print(f"Image {f} satisfy question{idx}")
+                        idx += 1
                     else:
                         print(f"Image {f} does not satisfy question{idx}")
                         break
@@ -400,7 +402,7 @@ class Preprocessor:
             elif args.caption_mode == 'captioner':
                 self.caption_Captioner(args, satisfy_folder)
             elif args.caption_mode == "tagger":
-                if hasattr(args.caption_mode, "thresh_tag"):
+                if hasattr(args, "thresh_tag"):
                     self.tagger(args, satisfy_folder)
                 else:
                     raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
@@ -414,7 +416,7 @@ class Preprocessor:
             elif args.caption_mode == 'captioner':
                 self.caption_Captioner(args, satisfy_folder)
             elif args.caption_mode == "tagger":
-                if hasattr(args.caption_mode, "thresh_tag"):
+                if hasattr(args, "thresh_tag"):
                     self.tagger(args, satisfy_folder)
                 else:
                     raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
@@ -442,3 +444,7 @@ if __name__ == "__main__":
     preprocessor = Preprocessor(args)
     preprocessor.filter(args)
     
+
+
+
+

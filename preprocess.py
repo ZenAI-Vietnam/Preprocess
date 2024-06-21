@@ -13,17 +13,17 @@ from PIL import Image
 import preprocess_util
 from pyiqa import create_metric
 from torchvision import transforms
-from share4v.eval.run_share4v import eval_model
+from gpt.eval.run_share4v import eval_model
 from transformers import AutoModel, AutoTokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from share4v.constants import (DEFAULT_IM_END_TOKEN, DEFAULT_IM_START_TOKEN,
+from gpt.constants import (DEFAULT_IM_END_TOKEN, DEFAULT_IM_START_TOKEN,
                                DEFAULT_IMAGE_TOKEN, IMAGE_TOKEN_INDEX)
-from share4v.conversation import SeparatorStyle, conv_templates
-from share4v.mm_utils import (KeywordsStoppingCriteria,
+from gpt.conversation import SeparatorStyle, conv_templates
+from gpt.mm_utils import (KeywordsStoppingCriteria,
                               get_model_name_from_path, tokenizer_image_token)
-from share4v.model.builder import load_pretrained_model
-from share4v.utils import disable_torch_init
+from gpt.model.builder import load_pretrained_model
+from gpt.utils import disable_torch_init
 
 
 

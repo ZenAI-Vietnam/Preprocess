@@ -1,4 +1,4 @@
-export PYTHONPATH="/path/to/ShareGPT4V:$PYTHONPATH"
+export PYTHONPATH="/path/to/gpt:$PYTHONPATH"
 
 Pillow
 torch

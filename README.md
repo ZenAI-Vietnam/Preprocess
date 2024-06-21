@@ -31,5 +31,5 @@ questions:
 ```
 ## Run
 ```bash
-python python preprocess.py --config-file /path/to/test.yaml
+python preprocess.py --config-file /path/to/test.yaml
 ```

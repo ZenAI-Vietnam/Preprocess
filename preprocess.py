@@ -191,7 +191,7 @@ class Preprocessor:
             json.dump(captions, f, indent=4)
         print(f'Done! Caption results are in {args.save_caption_file}.')
 
-    def caption_gpt(args, img_paths):
+    def caption_gpt(self, args, img_paths):
         disable_torch_init()
 
         model_name = get_model_name_from_path(args.model_path)
@@ -406,9 +406,11 @@ class Preprocessor:
                     self.tagger(args, satisfy_folder)
                 else:
                     raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
-            else:
+            elif args.caption_mode == "gpt":
                 img_paths = sorted(glob.glob(os.path.join(satisfy_folder, '*')))
                 self.caption_gpt(args, img_paths)
+            else: 
+                pass
         else:
 
             if args.caption_mode is None:
@@ -420,9 +422,11 @@ class Preprocessor:
                     self.tagger(args, satisfy_folder)
                 else:
                     raise AttributeError("Object 'args' does not have attribute 'thresh_tag'.")
-            else:
+            elif args.caption_mode == "gpt":
                 img_paths = sorted(glob.glob(os.path.join(satisfy_folder, '*')))
                 self.caption_gpt(args, img_paths)
+            else: 
+                pass
 
 def setup_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
@@ -443,8 +447,3 @@ if __name__ == "__main__":
 
     preprocessor = Preprocessor(args)
     preprocessor.filter(args)
-    
-
-
-
-

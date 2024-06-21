@@ -1,7 +1,7 @@
 directories:
-  image_folder: /home/sytrong-zenai/code/data_2
-  satisfy_folder: /home/sytrong-zenai/code/satisfy
-  notSatisfy_folder: /home/sytrong-zenai/code/notSatisfy
+  image_folder: /home/sytrong-zenai/code/image_test/test
+  satisfy_folder: /home/sytrong-zenai/code/satisfy_test
+  notSatisfy_folder: /home/sytrong-zenai/code/notSatisfy_test
 
 iqa:
   threshold: 50
@@ -12,16 +12,16 @@ iqa:
 caption:
   num_gpus: 1
   batch_size: 8
-  caption_mode: tagger
+  caption_mode: gpt
   thresh_tag: 0.3228
   tag_file: /home/sytrong-zenai/code/selected_tags.csv
   model_path: "Lin-Chen/ShareGPT4V-7B"
-  model_base: None
+  model_base: null
   query: "Describe this image. Be precise and short, focus on the content."
-  conv_mode: None
+  conv_mode: null
   sep: ","
-  temperature: None
-  top_p: None
+  temperature: null
+  top_p: null
   num_beams: 1
   max_new_tokens: 512
   save_caption_file: tag_caption_results_2.json
